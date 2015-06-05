@@ -6,6 +6,7 @@ app.use(logger('dev'));
 
 var Chance = require('chance');
 var chance = new Chance();
+var data = require('./data.json');
 
 app.get('/?*', function(request, response) {
 
@@ -22,6 +23,15 @@ app.get('/?*', function(request, response) {
       var body = chance.paragraph({
         sentences: 1
       });
+      response.setHeader('Content-Length', body.length);
+      response.setHeader('Content-Type', 'text/plain');
+      response.setHeader('Last-Modified', new Date());
+      response.setHeader('Cache-Control', 'max-age=1');
+
+      return response.send(body);
+
+    case 'json':
+      var body = data;
       response.setHeader('Content-Length', body.length);
       response.setHeader('Content-Type', 'text/plain');
       response.setHeader('Last-Modified', new Date());
